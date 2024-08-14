@@ -14,6 +14,40 @@ const goal = "g";
 const obstacle = "o";
 var gameRunning = true;
 
+const gameMusic = tune`
+205.4794520547945: C4~205.4794520547945 + G4^205.4794520547945,
+205.4794520547945: D4~205.4794520547945 + G4^205.4794520547945 + A4^205.4794520547945,
+205.4794520547945: E4~205.4794520547945 + B4^205.4794520547945 + A4^205.4794520547945 + C4-205.4794520547945,
+205.4794520547945: F4~205.4794520547945 + B4^205.4794520547945 + C5^205.4794520547945 + D4-205.4794520547945 + G5/205.4794520547945,
+205.4794520547945: G4~205.4794520547945 + C5^205.4794520547945 + D5^205.4794520547945 + B4-205.4794520547945 + E4-205.4794520547945,
+205.4794520547945: A4~205.4794520547945 + D5^205.4794520547945 + E5^205.4794520547945 + C5-205.4794520547945 + F4-205.4794520547945,
+205.4794520547945: B4~205.4794520547945 + E5^205.4794520547945 + F5^205.4794520547945 + D5-205.4794520547945,
+205.4794520547945: C5~205.4794520547945 + G5^205.4794520547945 + E5-205.4794520547945 + F5-205.4794520547945 + D5/205.4794520547945,
+205.4794520547945: C5~205.4794520547945 + G5^205.4794520547945 + F5-205.4794520547945 + E5-205.4794520547945 + D5/205.4794520547945,
+205.4794520547945: B4~205.4794520547945 + F5^205.4794520547945 + E5^205.4794520547945 + D5-205.4794520547945,
+205.4794520547945: A4~205.4794520547945 + E5^205.4794520547945 + D5^205.4794520547945 + F4-205.4794520547945 + C5-205.4794520547945,
+205.4794520547945: G4~205.4794520547945 + D5^205.4794520547945 + C5^205.4794520547945 + E4-205.4794520547945 + B4-205.4794520547945,
+205.4794520547945: F4~205.4794520547945 + C5^205.4794520547945 + B4^205.4794520547945 + D4-205.4794520547945 + G5/205.4794520547945,
+205.4794520547945: E4~205.4794520547945 + B4^205.4794520547945 + A4^205.4794520547945 + C4-205.4794520547945,
+205.4794520547945: D4~205.4794520547945 + A4^205.4794520547945 + G4^205.4794520547945,
+205.4794520547945: C4~205.4794520547945 + G4^205.4794520547945,
+205.4794520547945: C4~205.4794520547945 + G4^205.4794520547945,
+205.4794520547945: D4~205.4794520547945 + G4^205.4794520547945 + A4^205.4794520547945,
+205.4794520547945: E4~205.4794520547945 + B4^205.4794520547945 + A4^205.4794520547945 + C4-205.4794520547945,
+205.4794520547945: F4~205.4794520547945 + B4^205.4794520547945 + C5^205.4794520547945 + D4-205.4794520547945 + G5/205.4794520547945,
+205.4794520547945: G4~205.4794520547945 + D5^205.4794520547945 + C5^205.4794520547945 + B4-205.4794520547945 + E4-205.4794520547945,
+205.4794520547945: A4~205.4794520547945 + E5^205.4794520547945 + D5^205.4794520547945 + C5-205.4794520547945 + F4-205.4794520547945,
+205.4794520547945: B4~205.4794520547945 + E5^205.4794520547945 + F5^205.4794520547945 + D5-205.4794520547945 + G4-205.4794520547945,
+205.4794520547945: C5~205.4794520547945 + G5^205.4794520547945 + F5-205.4794520547945 + E5-205.4794520547945 + D5/205.4794520547945,
+205.4794520547945: C5~205.4794520547945 + G5^205.4794520547945 + E5-205.4794520547945 + F5-205.4794520547945 + D5/205.4794520547945,
+205.4794520547945: B4~205.4794520547945 + E5^205.4794520547945 + F5^205.4794520547945 + D5-205.4794520547945 + G4-205.4794520547945,
+205.4794520547945: A4~205.4794520547945 + D5^205.4794520547945 + E5^205.4794520547945 + C5-205.4794520547945 + F4-205.4794520547945,
+205.4794520547945: G4~205.4794520547945 + C5^205.4794520547945 + D5^205.4794520547945 + B4-205.4794520547945 + E4-205.4794520547945,
+205.4794520547945: F4~205.4794520547945 + B4^205.4794520547945 + C5^205.4794520547945 + D4-205.4794520547945 + G5/205.4794520547945,
+205.4794520547945: E4~205.4794520547945 + A4^205.4794520547945 + B4^205.4794520547945 + C4-205.4794520547945,
+205.4794520547945: D4~205.4794520547945 + G4^205.4794520547945 + A4^205.4794520547945,
+205.4794520547945: C4~205.4794520547945 + G4^205.4794520547945`
+
 setLegend(
   [player, bitmap`
 ................
@@ -32,6 +66,23 @@ setLegend(
 ......0.0.......
 .....00.00......
 ................`],
+  [obstacle, bitmap`
+6666666666666666
+6666666666666666
+9666666666666669
+9966666666666699
+9966666666666699
+9966666666666699
+9996666666666999
+9999C666666C9999
+9999CC6666CC9999
+9999CCC66CC99999
+.9999CCCCCC9999.
+..999CCCCCC999..
+...999CCCC999...
+....999CC999....
+.....999999.....
+......9999......`],
   [goal, bitmap`
 ................
 ..66........66..
@@ -49,6 +100,7 @@ setLegend(
 ...6666666666...
 6666666666666666
 ..666666666666..`],
+
   [wall, bitmap`
 0000000000000000
 0000000000000000
@@ -65,29 +117,11 @@ setLegend(
 0000000000000000
 0000000000000000
 0000000000000000
-0000000000000000`],
-  [obstacle, bitmap`
-6666666666666666
-6666666666666666
-9666666666666669
-9966666666666699
-9966666666666699
-9966666666666699
-9996666666666999
-9999C666666C9999
-9999CC6666CC9999
-9999CCC66CC99999
-.9999CCCCCC9999.
-..999CCCCCC999..
-...999CCCC999...
-....999CC999....
-.....999999.....
-......9999......`]
-)
+0000000000000000`]);
 
-setSolids([player, obstacle]);
+setSolids([player], [wall]);
 
-let level = 1
+let level = 0
 const levels = [
   map`
 wwwwwwwwww
@@ -115,45 +149,59 @@ ww.w..ww....w
 w...ww......w
 www.....wwwww`
 ]
+const playback = playTune(gameMusic, Infinity);
 
-setMap(levels[level])
+setMap(levels[level]);
 
 setPushables({
   [player]: []
-})
+});
 
 onInput("s", () => {
   if (gameRunning) {
-    getFirst(player).y += 1
-  }
-})
-onInput("w", () => {
-  if (gameRunning) {
-    getFirst(player).y -= 1
-  }
-})
-onInput("a", () => {
-  if (gameRunning) {
-    const nextTile = getTile(player.x -1, player.y)
-    
-    if (nextTile.contains) {
-      getFirst(player).x -= 1
+    const nextTile = getTile(getFirst(player).x, getFirst(player).y + 1);
+
+    if (!nextTile.some(sprite => sprite.type === wall)) {
+      getFirst(player).y += 1;
     }
   }
-})
+});
+onInput("w", () => {
+  if (gameRunning) {
+    const nextTile = getTile(getFirst(player).x, getFirst(player).y - 1);
+
+    if (!nextTile.some(sprite => sprite.type === wall)) {
+      getFirst(player).y -= 1;
+    }
+  }
+});
+onInput("a", () => {
+  if (gameRunning) {
+    const nextTile = getTile(getFirst(player).x - 1, getFirst(player).y);
+
+    if (!nextTile.some(sprite => sprite.type === wall)) {
+      getFirst(player).x -= 1;
+    }
+  }
+});
 onInput("d", () => {
   if (gameRunning) {
-    getFirst(player).x += 1
+    const nextTile = getTile(getFirst(player).x + 1, getFirst(player).y);
+
+    if (!nextTile.some(sprite => sprite.type === wall)) {
+      getFirst(player).x += 1;
+    }
   }
-})
+});
 
 function spawnObstacle() {
-  let x = Math.floor(Math.random() * 8);
+  
+  let x = Math.floor(Math.random() * 13);
   let y = 0;
   addSprite(x, y, obstacle);
 }
 
-// Make obstacles move
+
 function moveObstacles() {
   let obstacles = getAll(obstacle);
 
@@ -162,12 +210,12 @@ function moveObstacles() {
   }
 }
 
-// Make obstacles disappear
+
 function despawnObstacles() {
   let obstacles = getAll(obstacle);
 
   for (let i = 0; i < obstacles.length; i++) {
-    if (obstacles[i].y == 8) {
+    if (obstacles[i].y == 13) {
       obstacles[i].remove();
     }
   }
@@ -175,7 +223,6 @@ function despawnObstacles() {
 
 // See if the player was hit
 function checkHit() {
-  // Step 3 - Fix code
   let obstacles = getAll(obstacle);
   let p = getFirst(player);
 
@@ -189,11 +236,28 @@ function checkHit() {
 }
 
 var gameLoop = setInterval(() => {
-  // Step 4 - Add all game functions
-  despawnObstacles();
-  moveObstacles();
-  spawnObstacle();
+  if (gameRunning) {
+    despawnObstacles();
+    moveObstacles();
+    spawnObstacle();
+    // Step 4 - Add all game functions
+    if (checkHit()) {
+      playback.end()
+      clearInterval(gameLoop);
+      gameRunning = false;
+      addText("Game Over!", {
+        x: 5,
+        y: 6,
+        color: color`3`
+      });
+    }
+  }
+}, 1000);
+
+var gameLoopButHitChecker = setInterval(() => {
+   if (gameRunning) {
   if (checkHit()) {
+    playback.end()
     clearInterval(gameLoop);
     gameRunning = false;
     addText("Game Over!", {
@@ -202,8 +266,9 @@ var gameLoop = setInterval(() => {
       color: color`3`
     });
   }
+   }
 
-}, 1000);
+}, 100);
 
 afterInput(() => {
   const winner = tilesWith(player, goal).length;
@@ -214,6 +279,7 @@ afterInput(() => {
     if (currentLevel !== undefined) {
       setMap(currentLevel);
     } else {
+      gameRunning = false;
       addText("you win!", { y: 7, color: color`3` });
     }
   }
