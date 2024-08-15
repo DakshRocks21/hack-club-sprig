@@ -1,11 +1,8 @@
 /*
-First time? Check out the tutorial game:
-https://sprig.hackclub.com/gallery/getting_started
-
-@title: test
-@author: 
-@tags: []
-@addedOn: 2024-00-00
+@title: the maze with metors
+@author: Daksh Thapar (DakshRocks21/dak5h.exe)
+@tags: [maze, obstacle]
+@addedOn: 2024-08-15
 */
 
 const player = "p";
@@ -180,8 +177,37 @@ ww.w..ww....w
 .ww.....w..ww
 ..w.w..ww.w.w
 w...ww......w
-www.....wwwww`
+www.....wwwww`,
+  map`
+wwwwww.ww.ww..w
+wpww...w..w...w
+w.ww.ww.....w..
+w........wwwww.
+www.w.www..ww..
+....ww..w.ww...
+.wwww.w.w....ww
+....w....ww....
+www.ww.w...wwww
+....w..www..www
+.w.www.wwww...w
+ww..wwww.......
+...w.w.w..wwww.
+.ww........wwg.
+....wwwwwwwwwww`
 ]
+
+const size_map = [
+  [10, 10],
+  [13, 10],
+  [15,15]
+]
+
+const speeds = [
+  1000,
+  800,
+  500
+]
+
 const endScreen = map`
 wwwwwwwwww
 wwwwggwwww
@@ -194,13 +220,16 @@ wwwwwwwwww
 wwwwwwwwww
 wwwwwwwwww`;
 
-const playback = playTune(gameMusic, Infinity);
+var playback = playTune(gameMusic, Infinity);
+var gameOverMusic = playTune(gameOver, Infinity).end();
 
 setMap(levels[level]);
 
 setPushables({
   [player]: []
 });
+
+
 
 onInput("s", () => {
   if (gameRunning) {
@@ -242,67 +271,79 @@ onInput("d", () => {
 
 function spawnObstacle() {
 
-  let x = Math.floor(Math.random() * 13);
+  let x = Math.floor(Math.random() * size_map[level][0]);
   let y = 0;
   addSprite(x, y, obstacle);
 }
 onInput("j", () => {
 
-    // Stop the game loops
-    clearInterval(gameLoop);
-    clearInterval(gameLoopButHitChecker);
+  // Stop the game loops
+  clearInterval(gameLoop);
+  clearInterval(gameLoopButHitChecker);
+  clearText();
 
-    // Reset game variables
-    gameRunning = true;
-    level = 0;
+  // Reset game variables
+  gameRunning = true;
+  level = 0;
+  setMap(levels[level])
 
-    getAll(obstacle).forEach(obstacle => {
-      obstacle.remove();
-    });
-    if (gameOverMusic !== undefined) {
+  getAll(obstacle).forEach(obstacle => {
+    obstacle.remove();
+  });
+  if (gameOverMusic !== undefined) {
     gameOverMusic.end()
-    }
-    getFirst(player).x = 1; 
-    getFirst(player).y = 1; 
+  }
+  playback.end()
+  playback = playTune(gameMusic, Infinity);
+  getFirst(player).x = 1;
+  getFirst(player).y = 1;
 
-    gameLoop = setInterval(() => {
-      if (gameRunning) {
-        despawnObstacles();
-        moveObstacles();
-        spawnObstacle();
-
-        if (checkHit()) {
-          playback.end();
-          setMap(endScreen);
-          clearInterval(gameLoop);
-          gameRunning = false;
-          addText("Game Over!", {
-            x: 5,
-            y: 6,
-            color: color`3`
-          });
-        }
-      }
-    }, 1000);
-
-    gameLoopButHitChecker = setInterval(() => {
-      if (gameRunning) {
-        if (checkHit()) {
-          playback.end();
-          setMap(endScreen);
-          clearInterval(gameLoop);
-          gameRunning = false;
-          addText("Game Over!", {
-            x: 5,
-            y: 6,
-            color: color`3`
-          });
-        }
-      }
-
-    }, 100);
+  restartGameLoops();
 });
 
+function restartGameLoops(){
+  clearInterval(gameLoop);
+  clearInterval(gameLoopButHitChecker);
+  clearText();
+  gameLoop = setInterval(() => {
+    if (gameRunning) {
+      despawnObstacles();
+      moveObstacles();
+      spawnObstacle();
+
+      if (checkHit()) {
+        playback.end();
+        gameOverMusic = playTune(gameOver, Infinity);
+        setMap(endScreen);
+        clearInterval(gameLoop);
+        gameRunning = false;
+        addText("Game Over!", {
+          x: 5,
+          y: 6,
+          color: color`3`
+        });
+      }
+    }
+  }, speeds[level]);
+
+  gameLoopButHitChecker = setInterval(() => {
+    if (gameRunning) {
+      if (checkHit()) {
+        playback.end();
+        gameOverMusic = playTune(gameOver, Infinity);
+        setMap(endScreen);
+        clearInterval(gameLoop);
+        gameRunning = false;
+        addText("Game Over!", {
+          x: 5,
+          y: 6,
+          color: color`3`
+        });
+      }
+    }
+
+  }, 100);
+}
 
 function moveObstacles() {
   let obstacles = getAll(obstacle);
@@ -316,7 +357,8 @@ function despawnObstacles() {
   let obstacles = getAll(obstacle);
 
   for (let i = 0; i < obstacles.length; i++) {
-    if (obstacles[i].y == 13) {
+    console.log(obstacles[i].y, (size_map[level][1]-1))
+    if (obstacles[i].y == size_map[level][1]-1) {
       obstacles[i].remove();
     }
   }
@@ -342,7 +384,8 @@ var gameLoop = setInterval(() => {
     moveObstacles();
     spawnObstacle();
     if (checkHit()) {
-      playback.end()
+      playback.end();
+      gameOverMusic = playTune(gameOver, Infinity);
       setMap(endScreen);
       clearInterval(gameLoop);
       gameRunning = false;
@@ -353,12 +396,13 @@ var gameLoop = setInterval(() => {
       });
     }
   }
-}, 1000);
+}, speeds[level]);
 
 var gameLoopButHitChecker = setInterval(() => {
   if (gameRunning) {
     if (checkHit()) {
-      playback.end()
+      playback.end();
+      gameOverMusic = playTune(gameOver, Infinity);
       setMap(endScreen);
       clearInterval(gameLoop);
       gameRunning = false;
@@ -376,13 +420,14 @@ afterInput(() => {
   const winner = tilesWith(player, goal).length;
   if (winner > 0) {
     level = level + 1;
+    restartGameLoops()
 
     const currentLevel = levels[level];
     if (currentLevel !== undefined) {
       setMap(currentLevel);
     } else {
-      playback.end()
-      const gameOverMusic = playTune(gameOver, Infinity)
+      playback.end();
+      gameOverMusic = playTune(gameOver, Infinity);
       setMap(endScreen);
       gameRunning = false;
       addText("you win!", { y: 6, color: color`3` });
