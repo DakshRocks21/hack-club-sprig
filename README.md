@@ -43,7 +43,7 @@
 
 To play "The Maze with Meteors," you can either:
 
-1. **Play Online:** Use the [Hack Club Sprig Online Editor]([https://sprig.hackclub.com/editor](https://sprig.hackclub.com/gallery/the_maze_with_rain)) to run the game directly in your browser.
+1. **Play Online:** Use the [Hack Club Sprig Online Editor](https://sprig.hackclub.com/editor](https://sprig.hackclub.com/gallery/the_maze_with_rain) to run the game directly in your browser.
 2. **Clone the Repository:** If you want to modify the game or run it locally:
    - Clone the repository using `git clone <repository_url>`.
    - Open the game in the Sprig game editor or your preferred JavaScript environment.
